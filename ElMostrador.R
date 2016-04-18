@@ -19,7 +19,7 @@ Noticia <- cbind(Id = seq.int(nrow(Titulo)),Titulo,Link,Fecha)
 
 T <- c(id = NULL, Texto = NULL)
 
-for (i in 1:length(Link))
+for (i in 1:length(as.character(Link)))
   
 {
   url_d <- read_html(as.character(Link[i,]))
@@ -28,10 +28,12 @@ for (i in 1:length(Link))
   Texto <- html_nodes(Texto,"p")
   Texto <- as.character(Texto)
   
-  T1 <- c(Id = i, Texto = Texto)
+  T1 <- c(Id = i, Texto)
   T <- rbind(T,T1)
   
   i = i + 1
 }
 
 Base <- data.frame(T)
+
+BaseTextos <- T
