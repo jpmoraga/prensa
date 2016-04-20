@@ -13,7 +13,7 @@ library(stringi)
 
 Propiedades <- c(NULL,NULL,NULL)
 
-for(i in 1:2)
+for(i in 1:20)
   
   
 {
@@ -30,7 +30,7 @@ TipoProp <- sub("</span>","",TipoProp)
 Codigo <- html_nodes(TipoProp1,"h4")
 Codigo <- as.character(Codigo)
 Codigo <- sub(".*?<h4 data-pid=(.*?)\" data-gid=.*", "\\1", Codigo)
-Codigo <- substr(Codigo,1,7)
+Codigo <- substr(Codigo,2,7)
 
 Link <- html_nodes(TipoProp1,"a")
 Link <- as.character(Link)
@@ -46,3 +46,11 @@ i = i + 1
 
 }
 
+
+Propiedades <- as.data.frame(Propiedades)
+
+Propiedades <- subset(Propiedades,Propiedades$TipoProp != "Proyecto, Venta, Departamento")
+
+x <- Propiedades[,3]
+
+x <- as.character(x)
