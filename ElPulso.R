@@ -1,4 +1,3 @@
-
 library(dplyr)
 library(rvest)
 library(ggmap)
@@ -12,38 +11,48 @@ library(XML)
 
 url <- read_html("http://www.pulso.cl/")
 
-Noticia <- html_nodes(url,"div.span-10.border.clearfix")
-Noticia <- html_nodes(Noticia,"div.itemView")
+Noticia <- html_nodes(url,"div.viewport")
+Noticia <- html_nodes(Noticia,"ul")
+Noticia <- html_nodes(Noticia,"li")
 
 
 
-LT <- html_nodes(Noticia,"h1")
+LT <- html_nodes(Noticia,"p")
 LT <- as.character(LT)
 LT <- strsplit(LT,"title=")
 
 N <- c(NULL,NULL,NULL)
 
-for (i in 1:4)
+for (i in 1:12)
   
-    {
-    Link <- LT[[i]][1]
-    Link <- strsplit(Link,'<a href=\"')
-    Link <- Link[[1]][2]
-    Link <- paste("http://www.pulso.cl",Link,sep = "")
-
-    Titulo <- LT[[i]][2]
-    Titulo <- sub(".*?>(.*?)</a>\n</h1>.*", "\\1", Titulo)
-    
-
-    N1 <- cbind(i,Link,Titulo)
-    
-    N <- rbind(N,N1)
-    
-    i = i + 1
-    
+{
+  Link <- LT[[i]][1]
+  Link <- strsplit(Link,'<a href=\"')
+  Link <- Link[[1]][2]
+  Link <- paste("http://www.pulso.cl",Link,sep = "")
+  Link <- strsplit(Link,'\"')
+  Link <- Link[[1]][1]
+  
+  Titulo <- LT[[i]][2]
+  Titulo <- sub(".*?>(.*?)</a>\n</p>.*", "\\1", Titulo)
+  
+  
+  N1 <- cbind(i,Link,Titulo)
+  
+  N <- rbind(N,N1)
+  
+  i = i + 1
+  
 }
 
-Resumen <- html_nodes(Noticia,"p")
-Resumen <- sub(".*?<p>(.*?)</p>.*", "\\1", Resumen)
+N <- as.data.frame(N)
 
-Base <- cbind(N,Resumen)
+
+url_d <- read_html(as.character(N$Link[2]))
+
+Resumen <- html_nodes(url_d,"div.span-16.articleContent.border")
+Resumen <- html_nodes(Resumen,"em")
+Resumen <- html_nodes(Resumen,"span")
+Resumen <- as.character(Resumen)
+Resumen <- sub(".*?;\">(.*?)</span>.*", "\\1", Resumen)
+
