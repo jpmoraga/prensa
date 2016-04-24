@@ -56,3 +56,15 @@ Resumen <- html_nodes(Resumen,"span")
 Resumen <- as.character(Resumen)
 Resumen <- sub(".*?;\">(.*?)</span>.*", "\\1", Resumen)
 
+Datos <- html_nodes(url_d,"div.span-16.articleContent.border")
+Datos <- html_nodes(Datos,"small")
+Datos <- Datos[1]
+Datos <- as.character(Datos)
+Datos <- strsplit(Datos,"alt=")
+Datos <- Datos[[1]][2]
+
+Texto <- html_nodes(url_d,"div.span-16.articleContent.border")
+Texto <- html_nodes(Texto,"p")
+Texto <- as.character(Texto)
+Texto <- sub("<p>","",Texto)
+Texto <- sub("</p>","",Texto)
