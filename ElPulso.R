@@ -47,24 +47,37 @@ for (i in 1:12)
 
 N <- as.data.frame(N)
 
+D <- c(NULL,NULL,NULL)
+T <- c(NULL,NULL)
 
-url_d <- read_html(as.character(N$Link[2]))
-
-Resumen <- html_nodes(url_d,"div.span-16.articleContent.border")
-Resumen <- html_nodes(Resumen,"em")
-Resumen <- html_nodes(Resumen,"span")
-Resumen <- as.character(Resumen)
-Resumen <- sub(".*?;\">(.*?)</span>.*", "\\1", Resumen)
-
-Datos <- html_nodes(url_d,"div.span-16.articleContent.border")
-Datos <- html_nodes(Datos,"small")
-Datos <- Datos[1]
-Datos <- as.character(Datos)
-Datos <- strsplit(Datos,"alt=")
-Datos <- Datos[[1]][2]
-
-Texto <- html_nodes(url_d,"div.span-16.articleContent.border")
-Texto <- html_nodes(Texto,"p")
-Texto <- as.character(Texto)
-Texto <- sub("<p>","",Texto)
-Texto <- sub("</p>","",Texto)
+for(j in 1:length(N$Link))
+  
+    {
+    
+    url_d <- read_html(as.character(N$Link[j]))
+    
+    Resumen <- html_nodes(url_d,"div.span-16.articleContent.border")
+    Resumen <- html_nodes(Resumen,"em")
+    Resumen <- as.character(Resumen)
+    Resumen <- sub(".*?>(.*?)<p></p></p>\n</em>.*", "\\1", Resumen)
+    
+    Datos <- html_nodes(url_d,"div.span-16.articleContent.border")
+    Datos <- html_nodes(Datos,"em")
+    Datos <- as.character(Datos)
+    Datos <- sub(".*?>(.*?)<p></p></p>\n</em>.*", "\\1", Datos)
+    
+    Texto <- html_nodes(url_d,"div.span-16.articleContent.border")
+    Texto <- html_nodes(Texto,"p")
+    Texto <- as.character(Texto)
+    Texto <- sub("<p>","",Texto)
+    Texto <- sub("</p>","",Texto)
+    
+    D1 <- cbind(j,Datos,Resumen)
+    D <- rbind(D,D1)
+    
+    T1 <- cbind(j,Texto)
+    T <- rbind(T,T1)
+    
+    j = j + 1
+    
+    }
