@@ -29,7 +29,12 @@ for (i in 1:12)
   Link <- LT[[i]][1]
   Link <- strsplit(Link,'<a href=\"')
   Link <- Link[[1]][2]
-  Link <- paste("http://www.pulso.cl",Link,sep = "")
+  
+    if (substr(Link,1,1) == "/") 
+    {
+     Link <- paste("http://www.pulso.cl",Link,sep = "")
+    }
+
   Link <- strsplit(Link,'\"')
   Link <- Link[[1]][1]
   
@@ -81,3 +86,6 @@ for(j in 1:length(N$Link))
     j = j + 1
     
     }
+
+D <- as.data.frame(D)
+T <- as.data.frame(T)
